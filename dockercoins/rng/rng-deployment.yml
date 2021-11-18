@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rng
+  namespace: dockercoins
+  labels:
+    k8s-app: rng
+spec:
+  selector:
+    matchLabels:
+      k8s-app: rng
+  template:
+    metadata:
+      labels:
+        k8s-app: rng
+    spec:
+      containers:
+      - name: rng-container
+        image: crdockercoins01.azurecr.io/rng:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred

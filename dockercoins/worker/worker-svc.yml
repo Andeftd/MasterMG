@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-svc
+  namespace: dockercoins
+spec:
+  selector:
+    k8s-app: worker
+  type: ClusterIP
+  ports:
+  - name: worker-svc
+    protocol: TCP
+    port: 6379
+    targetPort: 6379

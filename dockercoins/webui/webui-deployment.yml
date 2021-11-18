@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui
+  namespace: dockercoins
+  labels:
+    k8s-app: webui
+spec:
+  selector:
+    matchLabels:
+      k8s-app: webui
+  template:
+    metadata:
+      labels:
+        k8s-app: webui
+    spec:
+      containers:
+      - name: webui-container
+        image: crdockercoins01.azurecr.io/webui:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+

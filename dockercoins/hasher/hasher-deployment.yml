@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hasher
+  namespace: dockercoins
+  labels:
+    k8s-app: hasher
+spec:
+  selector:
+    matchLabels:
+      k8s-app: hasher
+  template:
+    metadata:
+      labels:
+        k8s-app: hasher
+    spec:
+      containers:
+      - name: hasher-container
+        image: crdockercoins01.azurecr.io/hasher:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred

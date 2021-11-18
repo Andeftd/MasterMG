@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonar-postgres
+  namespace: sonarqube
+  labels:
+    name: sonar-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: sonar-postgres
+  template:
+    metadata:
+      name: sonar-postgres
+      labels:
+        name: sonar-postgres
+    spec:
+      containers:
+        - image: postgres:latest
+          name: sonar-postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-pwd
+                  key: password
+            - name: POSTGRES_USER
+              value: sonar
+          ports:
+            - containerPort: 5432
+              name: postgresport
+#          volumeMounts:
+            # This name must match the volumes.name below.
+#           - name: data-disk
+#              mountPath: /var/lib/postgresql/data
+#      volumes:
+#        - name: data-disk
+#          persistentVolumeClaim:
+#            claimName: claim-postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: sonar-postgres
+  name: sonar-postgres
+  namespace: sonarqube
+spec:
+  ports:
+    - port: 5432
+  selector:
+    name: sonar-postgres
+---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: claim-postgres
+#  namespace: sonarqube
+#spec:
+####  accessModes:
+#    - ReadWriteOnce
+##  resources:
+#    requests:
+#      storage: 8Gi
+#---
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: pv0001
+#  labels:
+#    type: local
+#  namespace: sonarqube
+##spec:
+#  capacity:
+#    storage: 10Gi
+#  accessModes:
+#    - ReadWriteOnce
+#  hostPath:
+#    path: /data/postgresql/

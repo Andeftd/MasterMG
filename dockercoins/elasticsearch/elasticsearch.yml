@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-configmap
+  namespace: logging
+data:
+  elasticsearch.yaml: |
+    discovery.type: single-node
+    network.host: 0.0.0.0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  namespace: logging
+  labels:
+    k8s-app: elasticsearch
+spec:
+  selector:
+    matchLabels:
+      k8s-app: elasticsearch
+  template:
+    metadata:
+      labels:
+        k8s-app: elasticsearch
+    spec:
+      initContainers:
+      - name: set-vm-sync-limit
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      containers:
+      - image: docker.elastic.co/elasticsearch/elasticsearch:6.8.20
+        name: elasticsearch-container
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9200
+          protocol: TCP
+        volumeMounts:
+          - name: elasticsearch-configmap
+            mountPath: /etc/elasticsearch/elasticsearch.yaml
+            subPath: elasticsearch.yaml
+      volumes:
+      - name: elasticsearch-configmap
+        configMap:
+          name: elasticsearch-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-svc
+  namespace: logging
+spec:
+  type: LoadBalancer
+  ports:
+    - name: elasticsearch-svc
+      protocol: TCP
+      port: 80
+      targetPort: 9200
+  selector:
+    k8s-app: elasticsearch

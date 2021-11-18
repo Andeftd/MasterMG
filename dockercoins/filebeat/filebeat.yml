@@ -1,0 +1,94 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: dockercoins
+  labels:
+    k8s-app: filebeat-config
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: container
+      paths:
+        - /var/log/containers/*.log
+      processors:
+        - add_kubernetes_metadata:
+            host: ${NODE_NAME}
+            matchers:
+            - logs_path:
+                logs_path: "/var/log/containers/"
+    output.redis:
+      hosts: ["10.0.208.4:6379"]
+      key: "DOCKERCOINS"
+      db: 0
+      timeout: 5
+      data_type: "list"
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dockercoins-filebeat
+  namespace: dockercoins
+  labels:
+    k8s-app: dockercoins-filebeat
+spec:
+  selector:
+    matchLabels:
+      k8s-app: dockercoins-filebeat
+  template:
+    metadata:
+      labels:
+        k8s-app: dockercoins-filebeat
+    spec:
+      containers:
+      - name: dockercoins-filebeat
+        image: store/elastic/filebeat:7.13.3
+        imagePullPolicy: Always
+        args: [
+          "-c", "/etc/filebeat.yml",
+          "-e",
+        ]
+        env:
+        - name: REDIS_HOST
+          value: "10.0.208.4"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+         runAsUser: 0
+        volumeMounts:
+        - name: config
+          mountPath: /etc/filebeat.yml
+          readOnly: true
+          subPath: filebeat.yml
+        - name: data
+          mountPath: /usr/share/filebeat/data
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 0640
+          name: filebeat-config
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: varlog
+        hostPath:
+          path: /var/log
+      # data folder stores a registry of read status for all files, so we don't send everything again on a Filebeat pod restart
+      - name: data
+        hostPath:
+          # When filebeat runs as non-root user, this directory needs to be writable by group (g+w).
+          path: /var/lib/filebeat-data
+          type: DirectoryOrCreate
+      imagePullSecrets:
+      - name: regcred

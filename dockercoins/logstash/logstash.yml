@@ -1,0 +1,80 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: logstash-config
+  namespace: logging
+data:
+  logstash-config: |
+    input {
+      redis {
+        host => "10.0.208.4"
+        key => "DOCKERCOINS"
+        data_type => "list"
+        tags => "DOCKERCOINS"
+      }
+    }
+
+    filter {
+      grok {
+        match => { "message" =>  "%{GREEDYDATA:contenu_log}" }
+      }
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["10.0.80.27:9200"]
+        manage_template => false
+        index => "filebeat-aks-%{+YYYY.MM.dd}"
+      }
+    }
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: logstash
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: logstash
+  template:
+    metadata:
+      labels:
+        name: logstash
+    spec:
+      hostname: logstash
+      containers:
+      - name: logstash
+        ports:
+        - containerPort: 5044
+          name: filebeat
+        image: library/logstash:6.8.17
+        volumeMounts:
+        - name: logstash-pipeline
+          mountPath: /usr/share/logstash/pipeline/
+        command:
+        - logstash
+      volumes:
+      - name: logstash-pipeline
+        configMap:
+          name: logstash-config
+          items:
+          - key: logstash-config
+            path: logstash.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash-svc
+  namespace: logging
+spec:
+  type: ClusterIP
+  ports:
+    - name: logstash-svc
+      protocol: TCP
+      port: 5044
+      targetPort: 5044
+  selector:
+    k8s-app: logstash
