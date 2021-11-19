@@ -6,15 +6,7 @@ podTemplate(label: 'mypod', containers: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]
   ) {
-    node('mypod') {
-        stage('Check running containers') {
-            container('docker') {
-                // example to show you can run docker commands when you mount the socket
-                sh 'hostname'
-                sh 'docker ps'
-            }
-        }
-        
+    node('mypod') { 
         stage('Clone repository') {
             container('git') {
                 sh 'git clone https://github.com/Andeftd/MasterMG'
