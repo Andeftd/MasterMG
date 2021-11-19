@@ -1,6 +1,5 @@
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ],
   volumes: [
@@ -12,25 +11,20 @@ podTemplate(label: 'mypod', containers: [
             container('docker') {
                 // example to show you can run docker commands when you mount the socket
                 sh 'hostname'
-                sh 'hostname -i'
                 sh 'docker ps'
             }
         }
         
         stage('Clone repository') {
             container('git') {
-                sh 'whoami'
-                sh 'hostname -i'
-                sh 'git clone -b master https://github.com/lvthillo/hello-world-war.git'
+                sh 'git clone https://github.com/Andeftd/MasterMG'
             }
         }
 
-        stage('Maven Build') {
-            container('maven') {
-                dir('hello-world-war/') {
-                    sh 'hostname'
-                    sh 'hostname -i'
-                    sh 'mvn clean install'
+        stage('Docker Build') {
+            container('docker') {
+                dir('MasterMG/dockercoins/') {
+                    sh 'docker build -t repository/docker/worker:1.0 worker/. && docker push 192.168.49.2:32001/repository/docker/worker:1.0'
                 }
             }
         }
