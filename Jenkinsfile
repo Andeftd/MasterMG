@@ -16,7 +16,9 @@ podTemplate(label: 'mypod', containers: [
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
-                    sh 'docker build -t repository/docker/worker:1.0 dockercoins/worker/. && docker push 192.168.49.2:32001/repository/docker/worker:1.0'
+                    sh 'docker build -t worker:1.0 dockercoins/worker/.'
+                    sh 'docker tag worker:1.0 192.168.49.2:32001/repository/docker/worker:1.0'
+                    sh 'docker push 192.168.49.2:32001/repository/docker/worker:1.0'
                 }
             }
         }
