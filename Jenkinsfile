@@ -16,7 +16,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
-                    sh 'docker build -t repository/docker/worker:1.0 /dockercoins/worker/.'
+                    sh 'docker build -t repository/docker/worker:1.0 dockercoins/worker/.'
                 }
             }
         }
