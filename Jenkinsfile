@@ -23,8 +23,8 @@ podTemplate(label: 'mypod', containers: [
 
         stage('Docker Build') {
             container('docker') {
-                dir('MasterMG/dockercoins/') {
-                    sh 'docker build -t repository/docker/worker:1.0 worker/. && docker push 192.168.49.2:32001/repository/docker/worker:1.0'
+                dir('MasterMG/dockercoins/worker/') {
+                    sh 'docker build -t repository/docker/worker:1.0 .'
                 }
             }
         }
