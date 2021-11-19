@@ -7,12 +7,18 @@ podTemplate(label: 'mypod', containers: [
   ]
   ) {
     node('mypod') { 
+        stage('Preparation Docker') {
+            container('docker') {
+                sh 'echo "{ "insecure-registries":["192.168.49.2:32001"] }" >> /etc/docker/daemon.json'
+                sh 'echo "DOCKER_OPTS="--config-file=/etc/docker/daemon.json"" >> /etc/default/docker'
+                sh 'systemctl stop docker && systemctl start docker'
+            }
+        }
         stage('Clone repository') {
             container('git') {
                 sh 'git clone https://github.com/Andeftd/MasterMG'
             }
         }
-
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
