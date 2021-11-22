@@ -21,8 +21,8 @@ podTemplate(label: 'mypod', containers: [
             container('docker') {
                 dir('MasterMG/') {
                     sh 'docker build -t worker:1.0 dockercoins/worker/.'
-                    sh 'docker tag worker:1.0 anfurtado/dockercoins/worker:1.0'
-                    sh 'docker push anfurtado/dockercoins/worker:1.0'
+                    sh 'docker tag worker:1.0 anfurtado/dockercoins:1.0'
+                    sh 'docker push anfurtado/dockercoins:1.0'
                 }
             }
         }
