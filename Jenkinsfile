@@ -51,10 +51,11 @@ podTemplate(label: 'mypod', containers: [
         stage('Build k8s objects on minikube') {
             container('kubectl') {
                 dir('MasterMG/') {
-                    sh 'kubectl apply -f dockercoins/hasher/.'
+                    /*sh 'kubectl apply -f dockercoins/hasher/.'
                     sh 'kubectl apply -f dockercoins/rng/.'
                     sh 'kubectl apply -f dockercoins/webui/.'
-                    sh 'kubectl apply -f dockercoins/worker/.'
+                    sh 'kubectl apply -f dockercoins/worker/.'*/
+                    sh 'kubectl get po -n jenkins'
                 }
             }
         }
