@@ -20,9 +20,30 @@ podTemplate(label: 'mypod', containers: [
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
+                    sh 'docker build -t hasher:1.0 dockercoins/hasher/.'
+                    sh 'docker build -t rng:1.0 dockercoins/rng/.'
+                    sh 'docker build -t webui:1.0 dockercoins/webui/.'
                     sh 'docker build -t worker:1.0 dockercoins/worker/.'
-                    sh 'docker tag worker:1.0 anfurtado/dockercoins:1.0'
-                    sh 'docker push anfurtado/dockercoins:1.0'
+                }
+            }
+        }
+        stage('Docker Tag') {
+            container('docker') {
+                dir('MasterMG/') {
+                    sh 'docker tag hasher:1.0 anfurtado/dockercoins:hasher:1.0'
+                    sh 'docker tag rng:1.0 anfurtado/dockercoins:rng:1.0'
+                    sh 'docker tag webui:1.0 anfurtado/dockercoins:webui:1.0'
+                    sh 'docker tag worker:1.0 anfurtado/dockercoins:worker:1.0'
+                }
+            }
+        }
+        stage('Docker Push') {
+            container('docker') {
+                dir('MasterMG/') {
+                    sh 'docker push anfurtado/dockercoins:hasher:1.0'
+                    sh 'docker push anfurtado/dockercoins:rng:1.0'
+                    sh 'docker push anfurtado/dockercoins:webui:1.0'
+                    sh 'docker push anfurtado/dockercoins:worker:1.0'
                 }
             }
         }
