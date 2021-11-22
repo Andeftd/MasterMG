@@ -51,7 +51,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Build k8s objects on minikube') {
             container('kubectl') {
                 dir('MasterMG/') {
-                    withKubeConfig([credentialsId: 'minikube', serverUrl: 'https://192.168.49.2:8443']) {
+                    withKubeConfig([credentialsId: 'c023c659-ab51-4d75-ac2e-b360d639fbbf', serverUrl: 'https://192.168.49.2:8443']) {
                         sh 'kubectl apply -f dockercoins/hasher/.'
                         sh 'kubectl apply -f dockercoins/rng/.'
                         sh 'kubectl apply -f dockercoins/webui/.'
