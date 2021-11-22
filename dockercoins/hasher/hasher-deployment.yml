@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: hasher-container
-        image: crdockercoins01.azurecr.io/hasher:latest
+        image: anfurtado/hasher:1.0
         ports:
         - containerPort: 80
-      imagePullSecrets:
-      - name: regcred
+      #imagePullSecrets:
+      #- name: regcred

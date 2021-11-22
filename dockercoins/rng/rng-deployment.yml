@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: rng-container
-        image: crdockercoins01.azurecr.io/rng:latest
+        image: anfurtado/rng:1.0
         ports:
         - containerPort: 80
-      imagePullSecrets:
-      - name: regcred
+      #imagePullSecrets:
+      #- name: regcred

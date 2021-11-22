@@ -6,10 +6,10 @@ metadata:
 spec:
   selector:
     k8s-app: webui
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: webui-svc
     protocol: TCP
     port: 80
     targetPort: 80
-
+    nodePort: 32080
