@@ -1,6 +1,7 @@
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'kubectl', image: 'bitnami/kubectl', ttyEnabled: true, command: 'cat')
   ],
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -44,6 +45,16 @@ podTemplate(label: 'mypod', containers: [
                     sh 'docker push anfurtado/rng:1.0'
                     sh 'docker push anfurtado/webui:1.0'
                     sh 'docker push anfurtado/worker:1.0'
+                }
+            }
+        }
+        stage('Build k8s objects on minikube') {
+            container('kubectl') {
+                dir('MasterMG/') {
+                    sh 'kubectl apply -f dockercoins/hasher/.'
+                    sh 'kubectl apply -f dockercoins/rng/.'
+                    sh 'kubectl apply -f dockercoins/webui/.'
+                    sh 'kubectl apply -f dockercoins/worker/.'
                 }
             }
         }
