@@ -25,7 +25,7 @@ podTemplate(label: 'mypod', containers: [
             }
         }
         stage('Analyse') {
-            container('Sonarqube') {
+            container('sonarqube') {
                 sh 'echo "A FAIRE"'
             }
         }
