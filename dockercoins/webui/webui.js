@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var redis = require('redis');
 
-ip_redis = "10.0.208.4"
+ip_redis = "10.109.105.119"
 
 var client = redis.createClient(6379, ip_redis);
 client.on("error", function (err) {

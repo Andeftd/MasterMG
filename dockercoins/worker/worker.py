@@ -4,9 +4,9 @@ from redis import Redis
 import requests
 import time
 
-ip_redis = "10.0.208.4"
-ip_rng = "10.0.86.79"
-ip_hasher = "10.0.207.112"
+ip_redis = "10.109.105.119"
+ip_rng = "10.108.59.127"
+ip_hasher = "10.108.239.211"
 
 DEBUG = os.environ.get("DEBUG", "").lower().startswith("y")
 
