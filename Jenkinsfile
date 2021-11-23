@@ -51,26 +51,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Build k8s objects on minikube') {
             container('kubectl') {
                 withKubeConfig([credentialsId: 'c023c659-ab51-4d75-ac2e-b360d639fbbf', 
-                                caCertificate: '-----BEGIN CERTIFICATE-----
-MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
-a3ViZUNBMB4XDTIxMTExNjE0NTgwNloXDTMxMTExNTE0NTgwNlowFTETMBEGA1UE
-AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMZj
-5Al7IhFvKe3Fugyx/An3lEqfiti807rzoomQtdR52kWhLlzJi7ExiQiW98KXGTnk
-LZVHhNAWa5K0ie/IWJD2QrrvLi2FoqGW4gtqkmukI6MDbPIsnOcbScWL6fHNgBLu
-bFX47hbyl6tohFp7Fw1Fp+z6rE2TULJUznvnrmeQXp286Ge22wHWGVwrDX4fAyKE
-mPZwgVxjNRh5Dxf8nfuOfqFFtv5/GFSjvLisf+k0G9C0Z4utaMjBnKNY2Ok8vPCc
-ISF+fjKNINzZRgYHYk9y7o4lJ/NU+hpqNSo8Hb0JcDRNIs7tQWfA2nlFAVucdrWh
-E9E9te/18PrhjnxQRmkCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW
-MBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
-BBTh1wZj6Uk4RYLOo3IbAUG0u/5DlDANBgkqhkiG9w0BAQsFAAOCAQEAmLYWeCtR
-ZEBK2lTDMGNhX8Sa7PpOCUxzKkrpR0820+zNfk/8ndrU46BAMCxkShxuMSJJje2T
-eBPjqHiSw3uTJ4xf0+woZTCfR19ZSER703M1/pn/+phvs+h0ZWcKjERoQ+XcZk7b
-C+B4fkkJzQlu5gBJ06b+c2aP/f9N0qrdThlU7Sdt/L0fSMyB4K3zL1tXizvc6a2W
-wNeJ9qXJ35w4xCcdoZafmUFzt9kStWRZm5gW/giWep37jPfHpbLe0Mw90nJe8Bh/
-yqcLWjFrkaJIXQstWGMsTULUBVjiY2baWKn/kMnEhWAaeuc8tfD9nNiha7TljvL0
-K57+Sw4AE9WzRg==
------END CERTIFICATE-----
-',
+                                caCertificate: '-----BEGIN CERTIFICATE-----\nMIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p\na3ViZUNBMB4XDTIxMTExNjE0NTgwNloXDTMxMTExNTE0NTgwNlowFTETMBEGA1UE\nAxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMZj\n5Al7IhFvKe3Fugyx/An3lEqfiti807rzoomQtdR52kWhLlzJi7ExiQiW98KXGTnk\nLZVHhNAWa5K0ie/IWJD2QrrvLi2FoqGW4gtqkmukI6MDbPIsnOcbScWL6fHNgBLu\nbFX47hbyl6tohFp7Fw1Fp+z6rE2TULJUznvnrmeQXp286Ge22wHWGVwrDX4fAyKE\nmPZwgVxjNRh5Dxf8nfuOfqFFtv5/GFSjvLisf+k0G9C0Z4utaMjBnKNY2Ok8vPCc\nISF+fjKNINzZRgYHYk9y7o4lJ/NU+hpqNSo8Hb0JcDRNIs7tQWfA2nlFAVucdrWh\nE9E9te/18PrhjnxQRmkCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW\nMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW\nBBTh1wZj6Uk4RYLOo3IbAUG0u/5DlDANBgkqhkiG9w0BAQsFAAOCAQEAmLYWeCtR\nZEBK2lTDMGNhX8Sa7PpOCUxzKkrpR0820+zNfk/8ndrU46BAMCxkShxuMSJJje2T\neBPjqHiSw3uTJ4xf0+woZTCfR19ZSER703M1/pn/+phvs+h0ZWcKjERoQ+XcZk7b\nC+B4fkkJzQlu5gBJ06b+c2aP/f9N0qrdThlU7Sdt/L0fSMyB4K3zL1tXizvc6a2W\nwNeJ9qXJ35w4xCcdoZafmUFzt9kStWRZm5gW/giWep37jPfHpbLe0Mw90nJe8Bh/\nyqcLWjFrkaJIXQstWGMsTULUBVjiY2baWKn/kMnEhWAaeuc8tfD9nNiha7TljvL0\nK57+Sw4AE9WzRg==\n-----END CERTIFICATE-----\n',
                                 serverUrl: 'https://192.168.49.2:8443',
                                 contextName: 'minikube',
                                 clusterName: 'minikube',
