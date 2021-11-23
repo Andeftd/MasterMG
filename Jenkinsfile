@@ -57,10 +57,10 @@ podTemplate(label: 'mypod', containers: [
                                 clusterName: 'minikube',
                                 namespace: 'default'
                                 ]) {
-                    sh 'kubectl apply -f MasterMG/dockercoins/hasher/.'
+                    /*sh 'kubectl apply -f MasterMG/dockercoins/hasher/.'
                     sh 'kubectl apply -f MasterMG/dockercoins/rng/.'
                     sh 'kubectl apply -f MasterMG/dockercoins/webui/.'
-                    sh 'kubectl apply -f MasterMG/dockercoins/worker/.'
+                    sh 'kubectl apply -f MasterMG/dockercoins/worker/.'*/
                 }
             }
         }
