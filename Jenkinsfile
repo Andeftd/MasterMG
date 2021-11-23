@@ -96,6 +96,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Load test') {
             container('git') {
                 sh 'echo "A FAIRE"'
+                input "Deploy to production ?"
             }
         }
         stage('Deploy - Production') {
