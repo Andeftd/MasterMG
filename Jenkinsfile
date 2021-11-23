@@ -75,7 +75,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'kubectl apply -f MasterMG/dockercoins/webui/.'
                 sh 'kubectl apply -f MasterMG/dockercoins/worker/.'
                 sh 'kubectl apply -f MasterMG/dockercoins/redis/.'
-                sh 'kubectl get deployments -o name -n dockercoins | sed -e "s#.*/##g" | xargs -I {} kubectl patch deployment {} -n dockercoins -p "{"spec":{"template":{"metadata":{"labels":{"date":"`date +"%s"`"}}}}}"'
+                sh 'kubectl get deployments -o name -n dockercoins | sed -e "s#.*/##g" | xargs -I {} kubectl patch deployment {} -n dockercoins -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +"%s"`\"}}}}}"'
             }
         }
     }
