@@ -69,6 +69,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Run kubectl') {
             container('kubectl') {
                 sh "kubectl get pods"
+                sh "kubectl create ns dockercoins --dry-run=client -o yaml | kubectl apply -f -"
                 sh 'kubectl apply -f MasterMG/dockercoins/hasher/.'
                 sh 'kubectl apply -f MasterMG/dockercoins/rng/.'
                 sh 'kubectl apply -f MasterMG/dockercoins/webui/.'
