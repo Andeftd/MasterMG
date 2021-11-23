@@ -1,7 +1,7 @@
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'kubectll', image: 'bitnami/kubectl', ttyEnabled: true, command: 'cat')
+    containerTemplate(name: 'kubectll', image: 'bitnami/kubectl', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:latest', ttyEnabled: true, command: 'cat')
   ],
   volumes: [
