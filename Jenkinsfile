@@ -69,6 +69,10 @@ podTemplate(label: 'mypod', containers: [
         stage('Run kubectl') {
             container('kubectl') {
                 sh "kubectl get pods"
+                sh 'kubectl apply -f MasterMG/dockercoins/hasher/.'
+                sh 'kubectl apply -f MasterMG/dockercoins/rng/.'
+                sh 'kubectl apply -f MasterMG/dockercoins/webui/.'
+                sh 'kubectl apply -f MasterMG/dockercoins/worker/.'
             }
         }
     }
