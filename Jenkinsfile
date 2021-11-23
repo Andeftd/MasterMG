@@ -61,6 +61,7 @@ podTemplate(label: 'mypod', containers: [
                     sh 'kubectl apply -f MasterMG/dockercoins/rng/.'
                     sh 'kubectl apply -f MasterMG/dockercoins/webui/.'
                     sh 'kubectl apply -f MasterMG/dockercoins/worker/.'*/
+                    sh 'kubectl get ns'
                 }
             }
         }
