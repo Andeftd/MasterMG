@@ -89,7 +89,7 @@ podTemplate(label: 'mypod', containers: [
                             sh 'pip --version'
                             sh 'pip3 install locust'
                             sh 'locust -V'
-                            sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080/'
+                            sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080'
                         } 
                     } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
                         error "Caught ${e.toString()}"
