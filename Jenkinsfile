@@ -35,7 +35,7 @@ podTemplate(label: 'mypod', containers: [
             container('maven') {
                 sh 'mvn --version'
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
-                sh 'mvn package'
+                sh 'mvn package -f my-app/'
                 sh 'java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
         }
