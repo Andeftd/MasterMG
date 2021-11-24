@@ -78,6 +78,9 @@ podTemplate(label: 'mypod', containers: [
             }
         }
         stage('Load test') {
+            options {
+                timeout(time: 1, unit: 'MINUTES')
+            }
             script {
                 Exception caughtException = null              
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
