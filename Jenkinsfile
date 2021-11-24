@@ -3,6 +3,7 @@ podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:latest', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'python', image: 'python:latest', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'maven', image: 'maven:latest', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'sonarqube', image: 'sonarqube:latest', ttyEnabled: true, command: 'cat')
   ],
   volumes: [
@@ -28,6 +29,14 @@ podTemplate(label: 'mypod', containers: [
         stage('Analyse') {
             container('sonarqube') {
                 sh 'echo "A FAIRE"'
+            }
+        }
+        stage('Maven Build') {
+            container('maven') {
+                sh 'mvn --version'
+                sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
+                sh 'mvn package'
+                sh 'java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
         }
         stage('Docker Build') {
@@ -78,9 +87,9 @@ podTemplate(label: 'mypod', containers: [
             }
         }
         stage('Load test') {
-            options {
+/*            options {
                 timeout(time: 1, unit: 'MINUTES')
-            }
+            }*/
             script {
                 Exception caughtException = null              
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
