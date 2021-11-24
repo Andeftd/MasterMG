@@ -80,7 +80,8 @@ podTemplate(label: 'mypod', containers: [
         stage('Load test') {
             container('python') {
                 sh 'pip --version'
-                sh 'pip install locustio'
+                sh 'pip3 install locust'
+                sh 'locust -V'
                 sh 'locust -f MasterMG/locust/locustfile.py --host=http://192.168.49.2:32080/'
                 input "Deploy to production ?"
             }
