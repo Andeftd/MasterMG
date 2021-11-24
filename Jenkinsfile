@@ -78,26 +78,24 @@ podTemplate(label: 'mypod', containers: [
             }
         }
         stage('Load test') {
-            steps {
-                script {
-                    Exception caughtException = null              
-                    catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
-                        try {
-                            container('python') {
-                                sh 'pip --version'
-                                sh 'pip3 install locust'
-                                sh 'locust -V'
-                                sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080/'
-                            } 
-                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
-                            error "Caught ${e.toString()}"
-                        } catch (Throwable e) {
-                            caughtException = e
-                        }
+            script {
+                Exception caughtException = null              
+                catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
+                    try {
+                        container('python') {
+                            sh 'pip --version'
+                            sh 'pip3 install locust'
+                            sh 'locust -V'
+                            sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080/'
+                        } 
+                    } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                        error "Caught ${e.toString()}"
+                    } catch (Throwable e) {
+                        caughtException = e
                     }
-                    if (caughtException) {
-                        error caughtException.message
-                    }
+                }
+                if (caughtException) {
+                    error caughtException.message
                 }
             }
         }
