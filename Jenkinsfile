@@ -78,16 +78,35 @@ podTemplate(label: 'mypod', containers: [
             }
         }
         stage('Load test') {
-            container('python') {
-                sh 'pip --version'
-                sh 'pip3 install locust'
-                sh 'locust -V'
-                sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080/'
-                input "Deploy to production ?"
+            options {
+                timeout(time: 10, unit: "MINUTES")
+            }
+            steps {
+                script {
+                    Exception caughtException = null              
+                    catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
+                        try {
+                            container('python') {
+                                sh 'pip --version'
+                                sh 'pip3 install locust'
+                                sh 'locust -V'
+                                sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080/'
+                            } 
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            error "Caught ${e.toString()}"
+                        } catch (Throwable e) {
+                            caughtException = e
+                        }
+                    }
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
             }
         }
         stage('Deploy - Production') {
             container('kubectl') {
+                input "Deploy to production ?"
                 sh 'echo "A FAIRE"'
             }
         }
