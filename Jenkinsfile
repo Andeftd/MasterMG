@@ -31,14 +31,13 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        stage('Maven Build') {
+/*        stage('Maven Build') {
             container('maven') {
                 sh 'mvn --version'
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
                 sh 'mvn package -f my-app/'
-                sh 'java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
-        }
+        }*/
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {

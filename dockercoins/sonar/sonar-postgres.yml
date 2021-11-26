@@ -16,6 +16,13 @@ spec:
       labels:
         name: sonar-postgres
     spec:
+      initContainers:
+      - name: set-vm-sync-limit
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
       containers:
         - image: postgres:latest
           name: sonar-postgres
@@ -30,21 +37,21 @@ spec:
           ports:
             - containerPort: 5432
               name: postgresport
-#          volumeMounts:
+          volumeMounts:
             # This name must match the volumes.name below.
-#           - name: data-disk
-#              mountPath: /var/lib/postgresql/data
-#      volumes:
-#        - name: data-disk
-#          persistentVolumeClaim:
-#            claimName: claim-postgres
+            - name: data-disk
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data-disk
+          persistentVolumeClaim:
+            claimName: claim-postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: sonar-postgres
-  name: sonar-postgres
+    name: sonar-postgres-svc
+  name: sonar-postgres-svc
   namespace: sonarqube
 spec:
   ports:
@@ -52,29 +59,29 @@ spec:
   selector:
     name: sonar-postgres
 ---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: claim-postgres
-#  namespace: sonarqube
-#spec:
-####  accessModes:
-#    - ReadWriteOnce
-##  resources:
-#    requests:
-#      storage: 8Gi
-#---
-#apiVersion: v1
-#kind: PersistentVolume
-#metadata:
-#  name: pv0001
-#  labels:
-#    type: local
-#  namespace: sonarqube
-##spec:
-#  capacity:
-#    storage: 10Gi
-#  accessModes:
-#    - ReadWriteOnce
-#  hostPath:
-#    path: /data/postgresql/
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-postgres
+  namespace: sonarqube
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0001
+  labels:
+    type: local
+  namespace: sonarqube
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/postgresql/
