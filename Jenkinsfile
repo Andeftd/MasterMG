@@ -30,7 +30,7 @@ podTemplate(label: 'mypod', containers: [
             container('sonarqube') {
                 def scannerHome = tool 'SonarQube Scanner 4.0';
                 withSonarQubeEnv('SonarqubeMasterSG') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=integration -Dsonar.sources=/dockercoins/."
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
                 }
             }
         }
