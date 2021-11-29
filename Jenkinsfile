@@ -28,8 +28,8 @@ podTemplate(label: 'mypod', containers: [
         }
         stage('Analyse') {
             container('sonarqube') {
-                def scannerHome = tool 'SonarScanner 4.0';
-                withSonarQubeEnv('My SonarQube Server') {
+                def scannerHome = tool 'SonarQube Scanner 4.0';
+                withSonarQubeEnv('SonarqubeMasterSG') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
