@@ -26,10 +26,10 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        stage('Sonarqube Analyse') {
-            steps {
-                def scannerHome = tool 'SonarQube Scanner 4.0';
-                withSonarQubeEnv('SonarqubeMasterSG') {
+        stage('Analyse') {
+            container('sonarqube') {
+                def scannerHome = tool 'SonarScanner 4.0';
+                withSonarQubeEnv('My SonarQube Server') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
