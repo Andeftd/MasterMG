@@ -26,9 +26,12 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        stage('Analyse') {
-            container('sonarqube') {
-                sh 'echo "A FAIRE"'
+        stage('Sonarqube Analyse') {
+            steps {
+                def scannerHome = tool 'SonarQube Scanner 4.0';
+                withSonarQubeEnv('SonarqubeMasterSG') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
 /*        stage('Maven Build') {
