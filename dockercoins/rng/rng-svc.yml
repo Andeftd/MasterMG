@@ -6,9 +6,10 @@ metadata:
 spec:
   selector:
     k8s-app: rng
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: rng-svc
     protocol: TCP
     port: 80
     targetPort: 80
+    nodePort: 32054

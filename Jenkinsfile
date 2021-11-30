@@ -2,9 +2,9 @@ podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:latest', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'python', image: 'python:latest', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'locust', image: 'locustio/locust', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'maven', image: 'maven:latest', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'sonarqube', image: 'sonarqube:latest', ttyEnabled: true, command: 'cat')
+    containerTemplate(name: 'python', image: 'python:3.7.12-alpine3.15', ttyEnabled: true, command: 'cat'),
   ],
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -21,20 +21,25 @@ podTemplate(label: 'mypod', containers: [
                 sh 'git clone https://github.com/Andeftd/MasterMG'
             }
         }
-        stage('Test') {
-            container('git') {
-                sh 'echo "A FAIRE"'
-            }
-        }
-        stage('Analyse') {
-            container('sonarqube') {
-                def scannerHome = tool 'SonarQube Scanner 4.0';
-                withSonarQubeEnv('SonarqubeMasterSG') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
+        stage('Test unitaire') {
+            container('python') {
+                sh 'pip3 install unittest2'
+                dir('dockercoins/worker/') {
+                    sh 'python3 -m unittest2 discover'
+                    if (!result.endsWith('SUCCESS')) {
+                        currentBuild.result = 'FAILURE'
+                        error 'Build failed!'
+                    }
                 }
             }
         }
-/*        stage('Maven Build') {
+/*        stage('Analyse') {
+            def scannerHome = tool 'SonarQube Scanner 4.0';
+            withSonarQubeEnv('SonarqubeMasterSG') {
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
+            }
+        }
+        stage('Maven Build') {
             container('maven') {
                 sh 'mvn --version'
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
@@ -88,16 +93,15 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        stage('Load test') {
-/*            options {
+        /*stage('Load test') {
+            options {
                 timeout(time: 1, unit: 'MINUTES')
-            }*/
+            }
             script {
                 Exception caughtException = null              
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
                     try {
-                        container('python') {
-                            sh 'pip --version'
+                        container('locust') {
                             sh 'pip3 install locust'
                             sh 'locust -V'
                             sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080'
@@ -112,7 +116,7 @@ podTemplate(label: 'mypod', containers: [
                     error caughtException.message
                 }
             }
-        }
+        }*/
         stage('Deploy - Production') {
             container('kubectl') {
                 input "Deploy to production ?"

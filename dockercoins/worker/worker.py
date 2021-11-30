@@ -3,6 +3,7 @@ import os
 from redis import Redis
 import requests
 import time
+import unittest2
 
 ip_redis = "10.109.105.119"
 ip_rng = "10.108.59.127"
@@ -23,6 +24,7 @@ redis = Redis(host= ip_redis, port= '6379')
 
 def get_random_bytes():
     r = requests.get("http://"+ip_rng+"/")
+    print(r)
     return r.content
 
 
