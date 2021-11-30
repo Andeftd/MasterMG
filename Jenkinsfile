@@ -26,7 +26,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'pip3 install unittest2'
                 dir('dockercoins/worker/') {
                     sh 'python3 -m unittest2 discover'
-                    if (!result.endsWith('SUCCESS')) {
+                    if (!result.endsWith('OK')) {
                         currentBuild.result = 'FAILURE'
                         error 'Build failed!'
                     }
