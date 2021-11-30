@@ -33,7 +33,7 @@ podTemplate(label: 'mypod', containers: [
                 }
             }
         }
-/*        stage('Analyse') {
+        stage('Analyse') {
             def scannerHome = tool 'SonarQube Scanner 4.0';
             withSonarQubeEnv('SonarqubeMasterSG') {
                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
@@ -45,7 +45,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
                 sh 'mvn package -f my-app/'
             }
-        }*/
+        }
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
@@ -93,16 +93,15 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        /*stage('Load test') {
-            options {
+        stage('Load test') {
+            /*options {
                 timeout(time: 1, unit: 'MINUTES')
-            }
+            }*/
             script {
                 Exception caughtException = null              
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
                     try {
                         container('locust') {
-                            sh 'pip3 install locust'
                             sh 'locust -V'
                             sh 'locust -f MasterMG/dockercoins/locust/locustfile.py --host=http://192.168.49.2:32080'
                         } 
@@ -116,7 +115,7 @@ podTemplate(label: 'mypod', containers: [
                     error caughtException.message
                 }
             }
-        }*/
+        }
         stage('Deploy - Production') {
             container('kubectl') {
                 input "Deploy to production ?"
