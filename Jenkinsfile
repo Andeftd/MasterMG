@@ -30,7 +30,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Test unitaire') {
             container('python') {
                 sh 'pip3 install unittest2'
-                dir('MasterMG/dockercoins/worker/') {
+                dir('MasterMG/dockercoins/worker') {
                     sh 'python3 -m unittest2 discover'
                     /*if (!result.endsWith('OK')) {
                         currentBuild.result = 'FAILURE'
