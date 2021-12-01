@@ -30,6 +30,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Test unitaire') {
             container('python') {
                 sh 'pip3 install unittest2'
+                sh 'pip3 install requests'
                 dir('MasterMG/') {
                     sh 'python3 -m unittest2 discover'
                     /*if (!result.endsWith('OK')) {
