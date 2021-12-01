@@ -45,11 +45,13 @@ podTemplate(label: 'mypod', containers: [
             def scannerHome = tool 'SonarQube Scanner 4.0';
             withSonarQubeEnv('SonarqubeMasterSG') {
                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
-                def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+            }
+        }
+        stage('Quality Gate') {
+                def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                      error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
-            }
         }
         stage('Maven Build') {
             container('maven') {
