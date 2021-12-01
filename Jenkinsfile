@@ -97,15 +97,15 @@ podTemplate(label: 'mypod', containers: [
                 /*sh 'kubectl get deployments -o name -n dockercoins | sed -e "s#.*\/##g" | xargs -I {} kubectl patch deployment {} -n dockercoins -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"'*/
             }
         }
-/*        stage('Regression test') {
+        stage('Regression test') {
             container('git') {
                 sh 'echo "A FAIRE"'
             }
         }
         stage('Load test') {
-            options {
+            /*options {
                 timeout(time: 1, unit: 'MINUTES')
-            }
+            }*/
             script {
                 Exception caughtException = null              
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
@@ -124,7 +124,7 @@ podTemplate(label: 'mypod', containers: [
                     error caughtException.message
                 }
             }
-        }*/
+        }
         stage('Deploy - Production') {
             container('kubectl') {
                 input "Deploy to production ?"
