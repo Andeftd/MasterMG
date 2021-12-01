@@ -21,6 +21,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Clone repository') {
             container('git') {
                 sh 'git clone https://github.com/Andeftd/MasterMG'
+                sh 'git init'
                 shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
                 env.commit_var = shortCommit
             }
