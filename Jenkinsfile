@@ -21,6 +21,8 @@ podTemplate(label: 'mypod', containers: [
         stage('Clone repository') {
             container('git') {
                 sh 'git clone https://github.com/Andeftd/MasterMG'
+                shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                env.commit_var = shortCommit
             }
         }
 /*        stage('Test unitaire') {
@@ -52,6 +54,7 @@ podTemplate(label: 'mypod', containers: [
             container('docker') {
                 dir('MasterMG/') {
                     sh 'docker build -t hasher:1.0 dockercoins/hasher/.'
+                    sh "docker build -t hasher:'${env.commit_var}' dockercoins/hasher/."
                     sh 'docker build -t rng:1.0 dockercoins/rng/.'
                     sh 'docker build -t webui:1.0 dockercoins/webui/.'
                     sh 'docker build -t worker:1.0 dockercoins/worker/.'
@@ -62,6 +65,7 @@ podTemplate(label: 'mypod', containers: [
             container('docker') {
                 dir('MasterMG/') {
                     sh 'docker tag hasher:1.0 anfurtado/hasher:1.0'
+                    sh "docker tag hasher:'${env.commit_var}' anfurtado/hasher:'${env.commit_var}'"
                     sh 'docker tag rng:1.0 anfurtado/rng:1.0'
                     sh 'docker tag webui:1.0 anfurtado/webui:1.0'
                     sh 'docker tag worker:1.0 anfurtado/worker:1.0'
@@ -72,6 +76,7 @@ podTemplate(label: 'mypod', containers: [
             container('docker') {
                 dir('MasterMG/') {
                     sh 'docker push anfurtado/hasher:1.0'
+                    sh "docker push anfurtado/hasher:'${env.commit_var}'"
                     sh 'docker push anfurtado/rng:1.0'
                     sh 'docker push anfurtado/webui:1.0'
                     sh 'docker push anfurtado/worker:1.0'
