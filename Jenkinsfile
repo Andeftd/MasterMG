@@ -29,7 +29,7 @@ podTemplate(label: 'mypod', containers: [
         }
         stage('Test unitaire') {
             container('python') {
-                sh 'pip3 install unittests2 requests nose coverage nose-watch'
+                sh 'pip3 install unittest2 requests nose coverage nose-watch'
                 dir('MasterMG/') {
                     sh 'nosetests --with-xunit'
                     validate = sh(returnStdout: true, script: "echo \$?")
