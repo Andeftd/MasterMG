@@ -12,7 +12,7 @@ podTemplate(label: 'mypod', containers: [
   ) {
     node('mypod') { 
         stage('Login DockerHub') {
-            withCredentials([string(credentialsId: 'dockerhub', variable: 'password')]) {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub', variable: 'password')]) {
                 container('docker') {
                     sh "docker login -u anfurtado -p '${password}'"
                 }
