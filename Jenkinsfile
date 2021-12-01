@@ -55,33 +55,42 @@ podTemplate(label: 'mypod', containers: [
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
-                    sh 'docker build -t hasher:1.0 dockercoins/hasher/.'
+                    sh 'docker build -t hasher:latest dockercoins/hasher/.'
                     sh "docker build -t hasher:'${env.commit_var}' dockercoins/hasher/."
-                    sh 'docker build -t rng:1.0 dockercoins/rng/.'
-                    sh 'docker build -t webui:1.0 dockercoins/webui/.'
-                    sh 'docker build -t worker:1.0 dockercoins/worker/.'
+                    sh 'docker build -t rng:latest dockercoins/rng/.'
+                    sh "docker build -t rng:'${env.commit_var}' dockercoins/rng/."
+                    sh 'docker build -t webui:latest dockercoins/webui/.'
+                    sh "docker build -t webui:'${env.commit_var}' dockercoins/webui/."
+                    sh 'docker build -t worker:latest dockercoins/worker/.'
+                    sh "docker build -t worker:'${env.commit_var}' dockercoins/worker/."
                 }
             }
         }
         stage('Docker Tag') {
             container('docker') {
                 dir('MasterMG/') {
-                    sh 'docker tag hasher:1.0 anfurtado/hasher:1.0'
+                    sh 'docker tag hasher:latest anfurtado/hasher:latest'
                     sh "docker tag hasher:'${env.commit_var}' anfurtado/hasher:'${env.commit_var}'"
-                    sh 'docker tag rng:1.0 anfurtado/rng:1.0'
-                    sh 'docker tag webui:1.0 anfurtado/webui:1.0'
-                    sh 'docker tag worker:1.0 anfurtado/worker:1.0'
+                    sh 'docker tag rng:latest anfurtado/rng:latest'
+                    sh "docker tag rng:'${env.commit_var}' anfurtado/rng:latest"
+                    sh 'docker tag webui:latest anfurtado/webui:latest'
+                    sh "docker tag webui:'${env.commit_var}' anfurtado/webui:latest"
+                    sh 'docker tag worker:latest anfurtado/worker:latest'
+                    sh "docker tag worker:'${env.commit_var}' anfurtado/worker:latest"
                 }
             }
         }
         stage('Docker Push') {
             container('docker') {
                 dir('MasterMG/') {
-                    sh 'docker push anfurtado/hasher:1.0'
+                    sh 'docker push anfurtado/hasher:latest'
                     sh "docker push anfurtado/hasher:'${env.commit_var}'"
-                    sh 'docker push anfurtado/rng:1.0'
-                    sh 'docker push anfurtado/webui:1.0'
-                    sh 'docker push anfurtado/worker:1.0'
+                    sh 'docker push anfurtado/rng:latest'
+                    sh "docker push anfurtado/rng:'${env.commit_var}'"
+                    sh 'docker push anfurtado/webui:latest'
+                    sh "docker push anfurtado/webui:'${env.commit_var}'"
+                    sh 'docker push anfurtado/worker:latest'
+                    sh "docker push anfurtado/worker:'${env.commit_var}'"
                 }
             }
         }
