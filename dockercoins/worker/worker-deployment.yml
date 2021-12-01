@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: worker-container
-        image: anfurtado/worker:1.0
+        image: anfurtado/worker:latest
         ports:
         - containerPort: 6379
       #imagePullSecrets:

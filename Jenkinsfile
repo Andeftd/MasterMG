@@ -29,14 +29,15 @@ podTemplate(label: 'mypod', containers: [
         }
         stage('Test unitaire') {
             container('python') {
-                sh 'pip3 install unittest2'
-                sh 'pip3 install requests'
+                sh 'pip3 install unittests2 requests nose coverage nose-watch'
                 dir('MasterMG/') {
-                    sh 'python3 -m unittest2 discover'
-                    /*if (!result.endsWith('OK')) {
+                    sh 'nosetests --with-xunit'
+                    validate = sh(returnStdout: true, script: "echo $?")
+                    env.validate_var = validate
+                    if env.validate_var != '0' {
                         currentBuild.result = 'FAILURE'
                         error 'Build failed!'
-                    }*/
+                    }
                 }
             }
         }
@@ -44,6 +45,10 @@ podTemplate(label: 'mypod', containers: [
             def scannerHome = tool 'SonarQube Scanner 4.0';
             withSonarQubeEnv('SonarqubeMasterSG') {
                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
+                def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+                if (qg.status != 'OK') {
+                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
             }
         }
         stage('Maven Build') {

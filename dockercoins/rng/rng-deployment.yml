@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: rng-container
-        image: anfurtado/rng:1.0
+        image: anfurtado/rng:latest
         ports:
         - containerPort: 80
       #imagePullSecrets:

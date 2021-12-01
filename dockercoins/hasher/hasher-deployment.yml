@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hasher-container
-        image: anfurtado/hasher:1.0
+        image: anfurtado/hasher:latest
         ports:
         - containerPort: 80
       #imagePullSecrets:

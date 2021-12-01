@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webui-container
-        image: anfurtado/webui:1.0
+        image: anfurtado/webui:latest
         ports:
         - containerPort: 80
       #imagePullSecrets:
