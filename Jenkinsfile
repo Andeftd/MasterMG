@@ -21,7 +21,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'git clone https://github.com/Andeftd/MasterMG'
             }
         }
-        stage('Test unitaire') {
+/*        stage('Test unitaire') {
             container('python') {
                 sh 'pip3 install unittest2'
                 dir('dockercoins/worker/') {
@@ -45,7 +45,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
                 sh 'mvn package -f my-app/'
             }
-        }
+        }*/
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
@@ -88,7 +88,7 @@ podTemplate(label: 'mypod', containers: [
                 /*sh 'kubectl get deployments -o name -n dockercoins | sed -e "s#.*\/##g" | xargs -I {} kubectl patch deployment {} -n dockercoins -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"'*/
             }
         }
-        stage('Regression test') {
+/*        stage('Regression test') {
             container('git') {
                 sh 'echo "A FAIRE"'
             }
@@ -115,7 +115,7 @@ podTemplate(label: 'mypod', containers: [
                     error caughtException.message
                 }
             }
-        }
+        }*/
         stage('Deploy - Production') {
             container('kubectl') {
                 input "Deploy to production ?"
