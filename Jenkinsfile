@@ -72,11 +72,11 @@ podTemplate(label: 'mypod', containers: [
                     sh 'docker tag hasher:latest anfurtado/hasher:latest'
                     sh "docker tag hasher:'${env.commit_var}' anfurtado/hasher:'${env.commit_var}'"
                     sh 'docker tag rng:latest anfurtado/rng:latest'
-                    sh "docker tag rng:'${env.commit_var}' anfurtado/rng:latest"
+                    sh "docker tag rng:'${env.commit_var}' anfurtado/rng:'${env.commit_var}'"
                     sh 'docker tag webui:latest anfurtado/webui:latest'
-                    sh "docker tag webui:'${env.commit_var}' anfurtado/webui:latest"
+                    sh "docker tag webui:'${env.commit_var}' anfurtado/webui:'${env.commit_var}'"
                     sh 'docker tag worker:latest anfurtado/worker:latest'
-                    sh "docker tag worker:'${env.commit_var}' anfurtado/worker:latest"
+                    sh "docker tag worker:'${env.commit_var}' anfurtado/worker:'${env.commit_var}'"
                 }
             }
         }
