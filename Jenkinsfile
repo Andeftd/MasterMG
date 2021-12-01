@@ -32,7 +32,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'pip3 install unittests2 requests nose coverage nose-watch'
                 dir('MasterMG/') {
                     sh 'nosetests --with-xunit'
-                    validate = sh(returnStdout: true, script: "echo $?")
+                    validate = sh(returnStdout: true, script: "echo \$?")
                     env.validate_var = validate
                     if env.validate_var != '0' {
                         currentBuild.result = 'FAILURE'
