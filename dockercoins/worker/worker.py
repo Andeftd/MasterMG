@@ -3,7 +3,6 @@ import os
 from redis import Redis
 import requests
 import time
-import unittest2
 
 ip_redis = "10.109.105.119"
 ip_rng = "10.108.59.127"

@@ -21,7 +21,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'git clone https://github.com/Andeftd/MasterMG'
             }
         }
-        stage('Test unitaire') {
+/*        stage('Test unitaire') {
             container('python') {
                 sh 'pip3 install unittest2'
                 dir('dockercoins/worker/') {
@@ -32,8 +32,8 @@ podTemplate(label: 'mypod', containers: [
                     }*/
                 }
             }
-        }
-        stage('Analyse') {
+        }*/
+/*        stage('Analyse') {
             def scannerHome = tool 'SonarQube Scanner 4.0';
             withSonarQubeEnv('SonarqubeMasterSG') {
                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=develop -Dsonar.sources=."
@@ -45,7 +45,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
                 sh 'mvn package -f my-app/'
             }
-        }
+        }*/
         stage('Docker Build') {
             container('docker') {
                 dir('MasterMG/') {
@@ -93,7 +93,7 @@ podTemplate(label: 'mypod', containers: [
                 sh 'echo "A FAIRE"'
             }
         }
-        stage('Load test') {
+/*        stage('Load test') {
             /*options {
                 timeout(time: 1, unit: 'MINUTES')
             }*/
@@ -115,7 +115,7 @@ podTemplate(label: 'mypod', containers: [
                     error caughtException.message
                 }
             }
-        }
+        }*/
         stage('Deploy - Production') {
             container('kubectl') {
                 input "Deploy to production ?"
