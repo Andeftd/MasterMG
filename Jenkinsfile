@@ -12,8 +12,10 @@ podTemplate(label: 'mypod', containers: [
   ) {
     node('mypod') { 
         stage('Login DockerHub') {
-            container('docker') {
-                sh 'docker login -u anfurtado -p @e1fG9e93'
+            withCredentials([string(credentialsId: 'dockerhub', variable: 'password')]) {
+                container('docker') {
+                    sh "docker login -u anfurtado -p '${password}'"
+                }
             }
         }
         stage('Clone repository') {
